@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser')
 
 const app = express()
 const http = require('http').createServer(app);
-// const io = require('socket.io')(http);
+const io = require('socket.io')(http);
 
 // Express App Config
 app.use(cookieParser())
@@ -33,14 +33,14 @@ if (process.env.NODE_ENV === 'production') {
 // const authRoutes = require('./api/auth/auth.routes')
 // const userRoutes = require('./api/user/user.routes')
 const boardRoutes = require('./api/board/board.routes')
-// const connectSockets = require('./api/socket/socket.routes')
+const connectSockets = require('./api/socket/socket.routes')
 
 
 // routes
 // app.use('/api/auth', authRoutes)
 // app.use('/api/user', userRoutes)
 app.use('/api/board', boardRoutes)
-// connectSockets(io)
+connectSockets(io)
 
 
 // Make every server-side-route to match the index.html
