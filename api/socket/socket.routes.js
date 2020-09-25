@@ -16,9 +16,8 @@ function connectSockets(io) {
         
         socket.on('update board', board => {
             console.log('update board');
-            // io.emit('update board', board)
 
-            // emits only to sockets in the same room
+            // emits only to sockets in the same board
             io.to(socket.myBoard).emit('send updated board', board)
         })
     })
