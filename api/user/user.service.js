@@ -6,11 +6,42 @@ const ObjectId = require('mongodb').ObjectId
 module.exports = {
     query,
     getById,
-    getByEmail,
+    getByUserName,
     remove,
     update,
     add
 }
+
+
+async function getByUserName(userName) {
+    const collection = await dbService.getCollection('user')
+    try {
+        const user = await collection.findOne({ userName })
+        return user
+    } catch (err) {
+        console.log(`ERROR: while finding user ${userName}`)
+        throw err;
+    }
+}
+async function add(user) {
+    const collection = await dbService.getCollection('user')
+    try {
+        await collection.insertOne(user);
+        return user;
+    } catch (err) {
+        console.log(`ERROR: cannot insert user`)
+        throw err;
+    }
+} 
+
+
+
+
+
+
+
+
+
 
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
@@ -30,28 +61,10 @@ async function getById(userId) {
     const collection = await dbService.getCollection('user')
     try {
         const user = await collection.findOne({ "_id": ObjectId(userId) })
-        delete user.password
-
-        user.givenReviews = await reviewService.query({ byUserId: ObjectId(user._id) })
-        user.givenReviews = user.givenReviews.map(review => {
-            delete review.byUser
-            return review
-        })
-
-
+        // delete user.password
         return user
     } catch (err) {
         console.log(`ERROR: while finding user ${userId}`)
-        throw err;
-    }
-}
-async function getByEmail(email) {
-    const collection = await dbService.getCollection('user')
-    try {
-        const user = await collection.findOne({ email })
-        return user
-    } catch (err) {
-        console.log(`ERROR: while finding user ${email}`)
         throw err;
     }
 }
@@ -78,17 +91,7 @@ async function update(user) {
         throw err;
     }
 }
-
-async function add(user) {
-    const collection = await dbService.getCollection('user')
-    try {
-        await collection.insertOne(user);
-        return user;
-    } catch (err) {
-        console.log(`ERROR: cannot insert user`)
-        throw err;
-    }
-}
+ 
 
 function _buildCriteria(filterBy) {
     const criteria = {};
