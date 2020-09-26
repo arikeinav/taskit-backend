@@ -33,7 +33,18 @@ async function add(user) {
         throw err;
     }
 } 
-
+async function getById(userId) {
+    console.log("getById -> userId", userId)
+    const collection = await dbService.getCollection('user')
+    try {
+        const user = await collection.findOne({ "_id": ObjectId(userId) })
+        // delete user.password
+        return user
+    } catch (err) {
+        console.log(`ERROR: while finding user ${userId}`)
+        throw err;
+    }
+}
 
 
 
@@ -57,17 +68,7 @@ async function query(filterBy = {}) {
     }
 }
 
-async function getById(userId) {
-    const collection = await dbService.getCollection('user')
-    try {
-        const user = await collection.findOne({ "_id": ObjectId(userId) })
-        // delete user.password
-        return user
-    } catch (err) {
-        console.log(`ERROR: while finding user ${userId}`)
-        throw err;
-    }
-}
+
 
 async function remove(userId) {
     const collection = await dbService.getCollection('user')

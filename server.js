@@ -30,14 +30,14 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors(corsOptions));
 }
 
-// const userRoutes = require('./api/user/user.routes')
+const userRoutes = require('./api/user/user.routes')
 const authRoutes = require('./api/auth/auth.routes')
 const boardRoutes = require('./api/board/board.routes')
 const connectSockets = require('./api/socket/socket.routes')
 
 
 // routes
-// app.use('/api/user', userRoutes)
+app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/board', boardRoutes)
 connectSockets(io)
